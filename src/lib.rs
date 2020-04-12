@@ -3,7 +3,8 @@ use crate::utils::{drop_last_char, last_char};
 
 mod core;
 mod utils;
-
+pub mod all;
+pub mod random;
 
 #[cfg(test)]
 mod tests {
