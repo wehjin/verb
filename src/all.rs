@@ -1,12 +1,12 @@
-use crate::{Audience, Mode, Tense};
+use crate::{Audience, Form, Mode, Tense};
 
 #[cfg(test)]
 mod tests {
-	use crate::all::variants;
+	use crate::all::forms;
 
 	#[test]
 	fn all_variants_contains_tn_x_an_x_mn_members() {
-		let x = variants();
+		let x = forms();
 		let tense_count = 2;
 		let audience_count = 2;
 		let mode_count = 2;
@@ -14,12 +14,12 @@ mod tests {
 	}
 }
 
-pub fn variants() -> Vec<(Tense, Audience, Mode)> {
+pub fn forms() -> Vec<Form> {
 	let mut all = Vec::new();
 	for tense in tenses() {
 		for audience in audiences() {
 			for mode in modes() {
-				all.push((tense, audience, mode))
+				all.push(Form { tense, audience, mode })
 			}
 		}
 	}
