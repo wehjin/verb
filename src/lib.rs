@@ -113,42 +113,54 @@ mod tests {
 			assert_eq!(translation.as_str(), *expected);
 		})
 	}
+
+	#[test]
+	fn verb_name() {
+		let verb = miru();
+		let name = verb.name();
+		assert_eq!("0_みる", name);
+	}
 }
 
 pub fn verbs() -> Vec<Verb> {
 	vec![miru(), kau(), matsu(), kaeru(), yomu(), asobu(), shinu(), kaku(), iku(), nugu(), sagasu()]
 }
 
-fn miru() -> Verb { Verb { kind: Kind::Ru, search: "みる".to_string(), english: "see".to_string() } }
+fn miru() -> Verb { Verb { ch: 0, kind: Kind::Ru, search: "みる".to_string(), english: "see".to_string() } }
 
-fn kau() -> Verb { Verb { kind: Kind::U, search: "かう".to_string(), english: "buy".to_string() } }
+fn kau() -> Verb { Verb { ch: 0, kind: Kind::U, search: "かう".to_string(), english: "buy".to_string() } }
 
-fn matsu() -> Verb { Verb { kind: Kind::U, search: "まつ".to_string(), english: "wait".to_string() } }
+fn matsu() -> Verb { Verb { ch: 0, kind: Kind::U, search: "まつ".to_string(), english: "wait".to_string() } }
 
-fn kaeru() -> Verb { Verb { kind: Kind::U, search: "かえる".to_string(), english: "go home".to_string() } }
+fn kaeru() -> Verb { Verb { ch: 0, kind: Kind::U, search: "かえる".to_string(), english: "go home".to_string() } }
 
-fn yomu() -> Verb { Verb { kind: Kind::U, search: "よむ".to_string(), english: "read".to_string() } }
+fn yomu() -> Verb { Verb { ch: 0, kind: Kind::U, search: "よむ".to_string(), english: "read".to_string() } }
 
-fn asobu() -> Verb { Verb { kind: Kind::U, search: "あそぶ".to_string(), english: "play".to_string() } }
+fn asobu() -> Verb { Verb { ch: 0, kind: Kind::U, search: "あそぶ".to_string(), english: "play".to_string() } }
 
-fn shinu() -> Verb { Verb { kind: Kind::U, search: "しぬ".to_string(), english: "die".to_string() } }
+fn shinu() -> Verb { Verb { ch: 0, kind: Kind::U, search: "しぬ".to_string(), english: "die".to_string() } }
 
-fn kaku() -> Verb { Verb { kind: Kind::U, search: "かく".to_string(), english: "write".to_string() } }
+fn kaku() -> Verb { Verb { ch: 0, kind: Kind::U, search: "かく".to_string(), english: "write".to_string() } }
 
-fn iku() -> Verb { Verb { kind: Kind::U, search: "行く".to_string(), english: "go".to_string() } }
+fn iku() -> Verb { Verb { ch: 0, kind: Kind::U, search: "行く".to_string(), english: "go".to_string() } }
 
-fn nugu() -> Verb { Verb { kind: Kind::U, search: "ぬぐ".to_string(), english: "disrobe".to_string() } }
+fn nugu() -> Verb { Verb { ch: 0, kind: Kind::U, search: "ぬぐ".to_string(), english: "disrobe".to_string() } }
 
-fn sagasu() -> Verb { Verb { kind: Kind::U, search: "さがす".to_string(), english: "search".to_string() } }
+fn sagasu() -> Verb { Verb { ch: 0, kind: Kind::U, search: "さがす".to_string(), english: "search".to_string() } }
 
 #[derive(Clone, PartialEq, Debug)]
 pub struct Verb {
+	pub ch: u32,
 	pub kind: Kind,
 	pub search: String,
 	pub english: String,
 }
 
 impl Verb {
+	pub fn name(&self) -> String {
+		format!("{}_{}", self.ch, self.search)
+	}
+
 	pub fn conjugate(&self, tense: Tense, audience: Audience, mode: Mode) -> String {
 		match mode {
 			Mode::Immediate => conjugate_verb(&self.search, self.kind, tense, audience),
