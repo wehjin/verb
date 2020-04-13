@@ -1,4 +1,4 @@
-use crate::{all, Audience, Mode, Tense};
+use crate::{all, Audience, Form, Mode, Polarity, Tense};
 
 #[cfg(test)]
 mod tests {
@@ -8,7 +8,18 @@ mod tests {
 	fn randoms() {
 		random::tense();
 		random::audience();
+		random::polarity();
 		random::mode();
+		random::form();
+	}
+}
+
+pub fn form() -> Form {
+	Form {
+		tense: tense(),
+		audience: audience(),
+		polarity: polarity(),
+		mode: mode(),
 	}
 }
 
@@ -28,3 +39,5 @@ fn random_u8() -> u8 {
 pub fn audience() -> Audience { random_pick(all::audiences()) }
 
 pub fn mode() -> Mode { random_pick(all::modes()) }
+
+pub fn polarity() -> Polarity { random_pick(all::polarities()) }
