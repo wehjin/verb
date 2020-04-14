@@ -20,6 +20,7 @@ pub enum Kind {
 	U,
 	Ru,
 	Suru,
+	Kuru,
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]

@@ -200,9 +200,30 @@ mod tests {
 	}
 
 	#[test]
-	fn suru_base_verb() {
-		let base_verb = Verb { ch: 100, kind: Kind::Suru, search: "する".to_string(), english: "do".to_string() };
-		assert_eq!(base_verb.conjugate(Present, Polite, Affirmative, Immediate), "します");
+	fn kuru_verb() {
+		let verb = Verb {
+			ch: 100,
+			kind: Kind::Kuru,
+			search: "持ってくる".to_string(),
+			english: "come".to_string(),
+		};
+		assert_eq!(verb.conjugate(Present, Plain, Affirmative, Immediate), "持ってくる");
+		assert_eq!(verb.conjugate(Present, Polite, Affirmative, Immediate), "持ってきます");
+		assert_eq!(verb.conjugate(Past, Plain, Affirmative, Immediate), "持ってきた");
+		assert_eq!(verb.conjugate(Past, Polite, Affirmative, Immediate), "持ってきました");
+		assert_eq!(verb.conjugate(Present, Plain, Affirmative, Potential), "持ってこられる");
+		assert_eq!(verb.conjugate(Present, Polite, Affirmative, Potential), "持ってこられます");
+		assert_eq!(verb.conjugate(Past, Plain, Affirmative, Potential), "持ってこられた");
+		assert_eq!(verb.conjugate(Past, Polite, Affirmative, Potential), "持ってこられました");
+
+		assert_eq!(verb.conjugate(Present, Plain, Negative, Immediate), "持ってこない");
+		assert_eq!(verb.conjugate(Present, Polite, Negative, Immediate), "持ってきません");
+		assert_eq!(verb.conjugate(Past, Plain, Negative, Immediate), "持ってこなかった");
+		assert_eq!(verb.conjugate(Past, Polite, Negative, Immediate), "持ってきませんでした");
+		assert_eq!(verb.conjugate(Present, Plain, Negative, Potential), "持ってこられない");
+		assert_eq!(verb.conjugate(Present, Polite, Negative, Potential), "持ってこられません");
+		assert_eq!(verb.conjugate(Past, Plain, Negative, Potential), "持ってこられなかった");
+		assert_eq!(verb.conjugate(Past, Polite, Negative, Potential), "持ってこられませんでした");
 	}
 
 	#[test]
@@ -279,6 +300,7 @@ fn potential(verb: &str, kind: Kind) -> String {
 			_ => panic!("Invalid ending")
 		}),
 		Kind::Suru => (drop_last_char(&drop_last_char(verb)), "できる"),
+		Kind::Kuru => (drop_last_char(&drop_last_char(verb)), "こられる"),
 	};
 	format!("{}{}", pre, post)
 }
@@ -299,8 +321,7 @@ fn conjugate_verb(verb: &str, kind: Kind, tense: Tense, audience: Audience, pola
 fn ta(verb: &str, kind: Kind) -> String {
 	match kind {
 		Kind::Ru => format!("{}{}", drop_last_char(verb), "た"),
-		Kind::U if verb.ends_with("行く") || verb == "いく" || verb.ends_with("ていく") =>
-			format!("{}{}", drop_last_char(verb), "った"),
+		Kind::U if is_iku(verb) => format!("{}{}", drop_last_char(verb), "った"),
 		Kind::U => format!("{}{}", drop_last_char(verb), match last_char(verb).as_str() {
 			"う" => "った",
 			"つ" => "った",
@@ -314,7 +335,12 @@ fn ta(verb: &str, kind: Kind) -> String {
 			_ => panic!("Invalid ending")
 		}),
 		Kind::Suru => format!("{}{}", drop_last_char(&drop_last_char(verb)), "した"),
+		Kind::Kuru => format!("{}{}", drop_last_char(&drop_last_char(verb)), "きた"),
 	}
+}
+
+fn is_iku(verb: &str) -> bool {
+	verb.ends_with("行く") || verb.ends_with("て行く") || verb == "いく" || verb.ends_with("ていく")
 }
 
 fn pre_nai(verb: &str, kind: Kind) -> String {
@@ -322,6 +348,7 @@ fn pre_nai(verb: &str, kind: Kind) -> String {
 		Kind::Ru => drop_last_char(verb),
 		Kind::U => format!("{}{}", drop_last_char(verb), a(&last_char(verb))),
 		Kind::Suru => format!("{}{}", drop_last_char(&drop_last_char(verb)), "し"),
+		Kind::Kuru => format!("{}{}", drop_last_char(&drop_last_char(verb)), "こ")
 	}
 }
 
@@ -345,6 +372,7 @@ fn pre_masu(verb: &str, kind: Kind) -> String {
 		Kind::Ru => drop_last_char(verb),
 		Kind::U => format!("{}{}", drop_last_char(verb), i(&last_char(verb))),
 		Kind::Suru => format!("{}{}", drop_last_char(&drop_last_char(verb)), "し"),
+		Kind::Kuru => format!("{}{}", drop_last_char(&drop_last_char(verb)), "き"),
 	}
 }
 
