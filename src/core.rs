@@ -19,6 +19,7 @@ mod tests {
 pub enum Kind {
 	U,
 	Ru,
+	Suru,
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
